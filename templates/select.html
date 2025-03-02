@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kdrama Recommendation - Select Title</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        
+        h2 {
+            color: #3a3a3a;
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        .form-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        label {
+            display: block;
+            margin-right: 15px;
+            width: 120px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        /* Styling for radio buttons grouping */
+        .radio-group {
+            margin-bottom: 15px;
+        }
+        
+        .radio-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+            width: auto;
+        }
+        
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #7b68ee;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #6a5acd;
+        }
+        
+        p {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            label {
+                margin-bottom: 8px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Select the Correct Title</h2>
+        <div class = "form-container" >
+            <form method = "POST" action="/" >
+                {% for match in match_info %}
+                <div class= "radio-group">
+                    <label>
+                        <input type= "radio" name= "selected_index" value= "{{ match.index }}" required>
+                        {{ match.title }} ({{ match.year }} - {{ match.type }})
+                    </label>
+                </div>
+                {% endfor %}
+                <!-- Preserve the country filter -->
+                <input type="hidden" name="country" value="{{ country }}">
+                <input type="submit" value="Get Recommendations" class="submit-btn">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

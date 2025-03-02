@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kdrama Recommendation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        
+        h2 {
+            color: #3a3a3a;
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        .form-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        label {
+            display: block;
+            margin-right: 15px;
+            width: 120px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input[type="text"], select {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            min-width: 200px;
+        }
+        
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #7b68ee;
+            box-shadow: 0 0 5px rgba(123, 104, 238, 0.3);
+        }
+        
+        select {
+            cursor: pointer;
+            background-color: white;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #7b68ee;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #6a5acd;
+        }
+        
+        h3 {
+            color: #3a3a3a;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #eaeaea;
+        }
+        
+        /* Styling for dataframe output */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-table th {
+            background-color: #7b68ee;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid #ddd;
+        }
+        
+        .result-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        .result-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .result-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        p {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            label {
+                margin-bottom: 8px;
+                width: 100%;
+            }
+            
+            input[type="text"], select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Kdrama Recommendation</h2>
+        
+        <div class="form-container">
+            <form method="post">
+                <div class="form-group">
+                    <label for="title">Drama Title:</label>
+                    <input type="text" name="title" id="title" placeholder="Enter drama title all in lowercase" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="country">Drama Type:</label>
+                    <select name="country" id="country">
+                        <option value="all">All Types</option>
+                        <option value="korean">Korean</option>
+                        <option value="chinese">Chinese</option>
+                        <option value="japanese">Japanese</option>
+                    </select>
+                </div>
+                <p class="note">Note: The recommendations will be filtered by the drama type you specify.</p>
+                <input type="submit" value="Get Recommendations" class="submit-btn">
+            </form>
+        </div>
+
+        {% if recommendation %}
+        <h3>Recommended Dramas</h3>
+        <!-- The |safe filter tells Flask not to escape HTML -->
+        <div>{{ recommendation | safe }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>
