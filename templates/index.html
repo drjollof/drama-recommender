@@ -106,6 +106,12 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
         }
         
+        .container-footer {
+             width: 80%;
+             max-width: 1000px;
+             margin: 0 auto;
+}
+        
         .result-table th {
             background-color: #7b68ee;
             color: white;
@@ -134,9 +140,23 @@
             color: #666;
             padding: 20px;
         }
+
+        footer {
+            text-align: center;
+            margin: 30px auto 0;
+            padding: 15px;
+            width: 80%;
+            max-width: 1000px;
+            background-color: #f9f9f9;
+            font-size: 14px;
+            color: #777;
+            border-top: 1px solid #ddd;
+        }
         
         @media (max-width: 768px) {
-            .container {
+
+            
+            .container , footer {
                 width: 95%;
                 padding: 15px;
             }
@@ -159,7 +179,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Kdrama Recommendation</h2>
+        <h2>Drama Recommendation</h2>
         
         <div class="form-container">
             <form method="post">
@@ -188,5 +208,13 @@
         <div>{{ recommendation | safe }}</div>
         {% endif %}
     </div>
+    <footer>
+        &copy; <span id="year"></span> Drjollof
+    </footer>
+    <script>
+        // Set the current year dynamically
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
+
