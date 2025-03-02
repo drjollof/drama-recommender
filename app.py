@@ -1,18 +1,22 @@
 from flask import Flask, request, render_template, jsonify
 import joblib
 import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 
 #load the data and similarity matrix
-cf_sim = joblib.load('cf_sim.pkl')
+#cf_sim = joblib.load('cf_sim.pkl')
 app_df = joblib.load('app_df.pkl')
+
+mx = np.load('sim_matrix.npz')
+matrix = mx['matrix']  # Access the array using the key 'matrix'
 
 #create series for indexing
 title_reversed = pd.Series(app_df['title'].index, index = app_df['title'])
 
 def get_recommendation_bycf_by_index(idx, country_filter='all'):
-    rec_sim = list(enumerate(cf_sim[idx]))
+    rec_sim = list(enumerate(matrix[idx]))
     rec_sort = sorted(rec_sim, key=lambda x: x[1], reverse=True)
     top_n = rec_sort[0:30]
     rec_indices = [x[0] for x in top_n]
