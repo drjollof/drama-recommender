@@ -82,4 +82,4 @@ def index():
     return render_template('index2.html', recommendation=recommendation)
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run()

@@ -179,17 +179,17 @@
 </head>
 <body>
     <div class="container">
-        <h2>Drama Recommendation</h2>
+        <h2>Movie Recommendation</h2>
         
         <div class="form-container">
             <form method="post">
                 <div class="form-group">
-                    <label for="title">Drama Title:</label>
-                    <input type="text" name="title" id="title" placeholder="Enter drama title all in lowercase" required>
+                    <label for="title">Movie Title:</label>
+                    <input type="text" name="title" id="title" placeholder="Enter movie title all in lowercase" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="country">Drama Type:</label>
+                    <label for="country">Movie Type:</label>
                     <select name="country" id="country">
                         <option value="all">All Types</option>
                         <option value="korean">Korean</option>
@@ -198,13 +198,13 @@
                         <option value="hong kong">Hong Kong</option>
                     </select>
                 </div>
-                <p class="note">Note: The recommendations will be filtered by the drama type you specify.</p>
+                <p class="note">Note: The recommendations will be filtered by the movie type you specify.</p>
                 <input type="submit" value="Get Recommendations" class="submit-btn">
             </form>
         </div>
 
         {% if recommendation %}
-        <h3>Recommended Dramas</h3>
+        <h3>Recommended Movies</h3>
         <!-- The |safe filter tells Flask not to escape HTML -->
         <div>{{ recommendation | safe }}</div>
         {% endif %}
