@@ -2,15 +2,15 @@ from flask import Flask, request, render_template, jsonify
 import joblib
 import pandas as pd
 import numpy as np
+from rapidfuzz import process, fuzz
 
 app = Flask(__name__)
 
-#load the data and similarity matrix
-#cf_sim = joblib.load('cf_sim.pkl')
+#load the data and sim matrix
 app_df = joblib.load('app_df.pkl')
 
 mx = np.load('sim_matrix.npz')
-matrix = mx['matrix']  # Access the array using the key 'matrix'
+matrix = mx['matrix']  #access the array using the key 'matrix'
 
 #create series for indexing
 title_reversed = pd.Series(app_df['title'].index, index = app_df['title'])
@@ -38,6 +38,20 @@ def get_recommendation_bycf_by_index(idx, country_filter='all'):
         return "<p>No recommendations found for your search.</p>"
 
     return data.to_html(classes='result-table', border=0)
+
+#autocomplete endpoint using rapidfuzz
+@app.route('/autocomplete', methods=['GET'])
+def autocomplete():
+    query = request.args.get('query', '').strip().lower()
+    if not query:
+        return jsonify([])
+    
+     #return only  7 good matches
+    matches = process.extract(query, title_reversed.index, limit=7, scorer=fuzz.WRatio)
+    suggestions = [match[0] for match in matches if match[1] > 50]  
+    return jsonify(suggestions)
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

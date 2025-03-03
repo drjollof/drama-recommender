@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, jsonify
 import joblib
 import pandas as pd
+from rapidfuzz import process , fuzz
 
 app = Flask(__name__)
 
@@ -35,6 +36,18 @@ def get_recommendation_bycf_by_index(idx, country_filter='all'):
 
     return data.to_html(classes='result-table', border=0)
 
+#autocomplete endpoint using rapidfuzz
+@app.route('/autocomplete', methods=['GET'])
+def autocomplete():
+    query = request.args.get('query', '').strip().lower()
+    if not query:
+        return jsonify([])
+    
+     #return only  7 good matches
+    matches = process.extract(query, title_reversed.index, limit=7, scorer=fuzz.WRatio)
+    suggestions = [match[0] for match in matches if match[1] > 50]  
+    return jsonify(suggestions)
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     recommendation = None
@@ -52,14 +65,14 @@ def index():
             search_title = request.form.get('title')
             country_filter = request.form.get('country', 'all')
             
-            #get title index
+            #if user title is not in the title index
             if search_title not in title_reversed.index:
                 recommendation = "<p>Title not found.</p>"
                 return render_template('index2.html', recommendation=recommendation)
-            
+            #return title index
             matches = title_reversed[search_title]
             
-            # If multiple indices found, show the select page
+            #if multiple indices is found, show the select page
             if isinstance(matches, pd.Series) and len(matches) > 1:
                 match_indices = list(matches)
                 match_info = []
@@ -73,7 +86,7 @@ def index():
                     match_info.append(info)
                 return render_template('select2.html', match_info=match_info, country=country_filter)
             else:
-                # If only one match is found, get its index.
+                #if only one match is found, get its index.
                 if isinstance(matches, pd.Series):
                     idx = matches.iloc[0]
                 else:

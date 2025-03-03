@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Movies Recommendation</title>
+    <title>Asian Movies Recommendation</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -40,25 +40,28 @@
         .form-group {
             margin-bottom: 15px;
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
         }
         
         label {
-            display: block;
-            margin-right: 15px;
             width: 120px;
+            margin-right: 15px;
             font-weight: 600;
             color: #555;
         }
         
-        input[type="text"], select {
+        .autocomplete-wrapper {
+            position: relative;
             flex: 1;
+        }
+        
+        .autocomplete-wrapper input[type="text"] {
+            width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
-            min-width: 200px;
+            box-sizing: border-box;
         }
         
         input[type="text"]:focus, select:focus {
@@ -68,8 +71,13 @@
         }
         
         select {
-            cursor: pointer;
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
             background-color: white;
+            cursor: pointer;
         }
         
         .submit-btn {
@@ -105,12 +113,6 @@
             margin-top: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
         }
-        
-        .container-footer {
-             width: 80%;
-             max-width: 1000px;
-             margin: 0 auto;
-}
         
         .result-table th {
             background-color: #7b68ee;
@@ -154,9 +156,7 @@
         }
         
         @media (max-width: 768px) {
-
-            
-            .container , footer {
+            .container, footer {
                 width: 95%;
                 padding: 15px;
             }
@@ -168,24 +168,52 @@
             
             label {
                 margin-bottom: 8px;
-                width: 100%;
+                width: auto;
             }
-            
-            input[type="text"], select {
-                width: 100%;
-            }
+        }
+        
+        /* autocomplete styles */
+        .autocomplete-list {
+            list-style: none;
+            padding: 0;
+            margin: 2px 0 0 0;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .autocomplete-item {
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .autocomplete-item:hover {
+            background: #7b68ee;
+            color: white;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Movie Recommendation</h2>
+        <h2>Asian Movies Recommendation</h2>
         
         <div class="form-container">
             <form method="post">
                 <div class="form-group">
                     <label for="title">Movie Title:</label>
-                    <input type="text" name="title" id="title" placeholder="Enter movie title all in lowercase" required>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" name="title" id="title" placeholder="Enter movie title all in lowercase" required autocomplete="off">
+                        <ul id="suggestions" class="autocomplete-list"></ul>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -204,8 +232,7 @@
         </div>
 
         {% if recommendation %}
-        <h3>Recommended Movies</h3>
-        <!-- The |safe filter tells Flask not to escape HTML -->
+        <h3>Recommendations</h3>
         <div>{{ recommendation | safe }}</div>
         {% endif %}
     </div>
@@ -213,9 +240,49 @@
         &copy; <span id="year"></span> Drjollof
     </footer>
     <script>
-        // Set the current year dynamically
+        // set the current year dynamically
         document.getElementById("year").textContent = new Date().getFullYear();
+
+        // autocomplete function
+        document.getElementById("title").addEventListener("input", function() {
+            let query = this.value.trim();
+            let suggestionBox = document.getElementById("suggestions");
+
+            if (query.length < 2) {
+                suggestionBox.innerHTML = "";
+                suggestionBox.style.display = "none";
+                return;
+            }
+
+            fetch(`/autocomplete?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionBox.innerHTML = "";
+                    if (data.length > 0) {
+                        data.forEach(title => {
+                            let item = document.createElement("li");
+                            item.textContent = title;
+                            item.classList.add("autocomplete-item");
+                            item.onclick = function() {
+                                document.getElementById("title").value = title;
+                                suggestionBox.innerHTML = "";
+                                suggestionBox.style.display = "none";
+                            };
+                            suggestionBox.appendChild(item);
+                        });
+                        suggestionBox.style.display = "block";
+                    } else {
+                        suggestionBox.style.display = "none";
+                    }
+                });
+        });
+
+        // hide suggestions when user click outside the autocomplete wrapper
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".autocomplete-wrapper")) {
+                document.getElementById("suggestions").style.display = "none";
+            }
+        });
     </script>
 </body>
 </html>
-
