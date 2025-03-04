@@ -37,7 +37,7 @@ def get_recommendation_bycf_by_index(idx, country_filter='all'):
     if data.empty:
         return "<p>No recommendations found for your search.</p>"
 
-    return data.to_html(classes='result-table', border=0)
+    return data.to_html(classes='result-table', border=0, float_format= "%.2f")
 
 #autocomplete endpoint using rapidfuzz
 @app.route('/autocomplete', methods=['GET'])
