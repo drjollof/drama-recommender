@@ -26,7 +26,7 @@ def get_recommendation_bycf_by_index(idx, country_filter='all'):
 
     data = pd.concat([rec, country, year, link, sim_df], axis=1)
     data.columns = ['titles', 'type', 'year', 'link', 'similarity(%)']
-    data['titles'] = data.apply(lambda row: f'<a href = "{row['link']}" target = _blank>{row['titles']}</a>', axis=1)
+    data['titles'] = data.apply(lambda row: f'<a href = "{row["link"]}" target = _blank>{row["titles"]}</a>', axis=1)
     data.drop(columns=['link'], inplace=True)
 
     #apply filter if specified
