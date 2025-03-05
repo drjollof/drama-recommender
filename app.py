@@ -18,26 +18,31 @@ title_reversed = pd.Series(app_df['title'].index, index = app_df['title'])
 def get_recommendation_bycf_by_index(idx, country_filter='all'):
     rec_sim = list(enumerate(matrix[idx]))
     rec_sort = sorted(rec_sim, key=lambda x: x[1], reverse=True)
-    top_n = rec_sort[0:30]
-    rec_indices = [x[0] for x in top_n]
-    sim = [round(x[1] * 100, 2) for x in top_n]
+    rec_indices = [x[0] for x in rec_sort]
+    sim = [round(x[1] * 100, 2) for x in rec_sort]
 
     rec = pd.Series(app_df['title'].iloc[rec_indices]).reset_index(drop=True).to_frame()
     country = pd.Series(app_df['country'].iloc[rec_indices]).reset_index(drop=True).to_frame()
     year = pd.Series(app_df['year'].iloc[rec_indices]).reset_index(drop=True).to_frame()
     sim_df = pd.Series(sim).reset_index(drop=True).to_frame()
+    link = pd.Series(app_df['link'].iloc[rec_indices]).reset_index(drop=True).to_frame()
 
-    data = pd.concat([rec, country, year, sim_df], axis=1)
-    data.columns = ['titles', 'type', 'year', 'similarity(%)']
+    data = pd.concat([rec, country, year, link, sim_df], axis=1, ignore_index=True)
+    data.columns = ['titles', 'type', 'year', 'link', 'similarity(%)']
 
-    #apply filter if specified
+    #create hyperlinks using the 'link' column from each row.
+    data['titles'] = data.apply(lambda row: f'<a href="{row["link"]}" target="_blank">{row["titles"]}</a>', axis=1)
+    data.drop(columns=['link'], inplace=True)
+    #apply filter if specified and limit the number of rows to 30.
     if country_filter != 'all':
-        data = data[data['type'] == country_filter]
+        data = data[data['type'] == country_filter].reset_index(drop=True)
+    data = data.head(30)
 
     if data.empty:
         return "<p>No recommendations found for your search.</p>"
 
-    return data.to_html(classes='result-table', border=0, float_format= "%.2f")
+    return data.to_html(classes='result-table', border=0, float_format="%.2f", escape=False)
+
 
 #autocomplete endpoint using rapidfuzz
 @app.route('/autocomplete', methods=['GET'])

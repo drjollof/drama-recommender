@@ -230,7 +230,7 @@
                         <option value="japanese">Japanese</option>
                     </select>
                 </div>
-                <p class="note">Note: The recommendations will be filtered by the drama type you specify.</p>
+                <p class="note">Recommendations will be filtered by the drama type you specify and in order of their similarity</p>
                 <input type="submit" value="Get Recommendations" class="submit-btn">
             </form>
         </div>
@@ -240,6 +240,7 @@
         <!-- The |safe filter tells Flask not to escape HTML -->
         <div>{{ recommendation | safe }}</div>
         {% endif %}
+        <p class="note"><b style="color: red">Note: </b>Recommendations are content-based and may not be totally personalized for individual</p>
     </div>
     <footer>
         &copy; <span id="year"></span> Drjollof
