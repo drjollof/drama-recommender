@@ -19,14 +19,14 @@ A dedicated search and discovery engine for East Asian cinema and television. Th
 ## Data Scope
 The databases are curated to include titles released up until **Mid-2025**.
 
-*   **🎬 Movies:** Includes Chinese, Korean, Hong Kong, and Japanese titles.
-*   **📺 Dramas:** Includes Chinese, Korean, and Japanese titles.
+*   **Movies:** Includes Chinese, Korean, Hong Kong, and Japanese titles.
+*   **Dramas:** Includes Chinese, Korean, and Japanese titles.
 
 
 
 ## Key Features
-- **Dual-Engine Discovery:** Separate live sites for episodic dramas and feature films.
-- **Regional Filtering:** Users can refine recommendations by selecting specific countries of origin.
+- **Dual Sites:** Separate live sites for episodic dramas and feature films.
+- **Country Filtering:** Users can refine recommendations by selecting specific countries of origin.
 - **Content-Based Logic:** Suggestions are generated based on genres, cast, and plot tags.
 - **Real-Time Search:** Instant results powered by a lightweight Flask backend.
 
@@ -34,7 +34,7 @@ The databases are curated to include titles released up until **Mid-2025**.
 
 ## How It Works
 
-**Note on Complexity:** This project implements a **basic content-based filtering system**. It is designed for educational and practical search purposes rather than advanced predictive deep learning.
+**Note:** This project implements a **basic content-based filtering system**. It is designed for educational and practical search purposes rather than advanced predictive deep learning.
 
 ### 1. Simple Content Filtering
 The system identifies similarities by looking at the metadata of the titles. Unlike collaborative filtering, which requires user history, this model only uses the attributes of the titles themselves.
@@ -52,7 +52,7 @@ A core feature of this system is the **Country Selection**. Users can choose to 
 ## Tech Stack
 - **Framework:** Python (Flask)
 - **Data Handling:** Pandas, NumPy
-- **ML Basics:** Scikit-Learn (TF-IDF Vectorization, Cosine Similarity)
+- **Machine Learning:** Scikit-Learn (TF-IDF Vectorization, Cosine Similarity)
 - **Deployment:** Render
 
 
